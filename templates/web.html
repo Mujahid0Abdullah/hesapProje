@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Denklem Oluşturucu</title>
+</head>
+<body>
+    <h1>Hedef Sayıyı Girin</h1>
+    <input type="number" id="hedef-sayisi" placeholder="Hedef Sayı">
+    <h1>Kaç Sayı Kullanmak İstiyorsunuz?</h1>
+    <input type="number" id="sayi-adedi" placeholder="Sayı Adedi">
+    <br>
+    <br>
+    <div id="sayilar"></div>
+    <button id="hesapla-butonu">Hesapla</button>
+    <br>
+    <br>
+    <div id="sonuclar"></div>
+
+    <script>
+        const hedefSayisi = document.getElementById("hedef-sayisi");
+        const sayiAdedi = document.getElementById("sayi-adedi");
+        const sayilarDiv = document.getElementById("sayilar");
+        const sonuclarDiv = document.getElementById("sonuclar");
+
+        function olusturSayiInputleri() {
+            const sayiAdediValue = parseInt(sayiAdedi.value);
+            sayilarDiv.innerHTML = ""; // Önceki sayı inputlarını temizle
+
+            for (let i = 1; i <= sayiAdediValue; i++) {
+                const input = document.createElement("input");
+                input.type = "number";
+                input.id = `sayi${i}`;
+                input.placeholder = `${i}. Sayı`;
+                sayilarDiv.appendChild(input);
+                sayilarDiv.appendChild(document.createElement("br"));
+            }
+        }
+
+        async function hesapla() {
+            const hedef = parseInt(hedefSayisi.value);
+            const sayiAdediValue = parseInt(sayiAdedi.value);
+
+            if (isNaN(hedef) || isNaN(sayiAdediValue)) {
+                alert("Lütfen geçerli değerler girin.");
+                return;
+            }
+
+            const sayilar = [];
+            for (let i = 1; i <= sayiAdediValue; i++) {
+                const sayi = parseInt(document.getElementById(`sayi${i}`).value);
+                if (isNaN(sayi)) {
+                    alert(`Lütfen ${i}. sayı için geçerli bir değer girin.`);
+                    return;
+                }
+                sayilar.push(sayi);
+            }
+
+            const veri = {
+                hedef,
+                sayilar,
+            };
+
+            const url = "/hesapla";
+            const options = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(veri),
+            };
+
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+
+                const sonuclarHtml = data.denklemler.map(denklem => `<p>${denklem}</p>`).join("");
+                sonuclarDiv.innerHTML = sonuclarHtml;
+            } catch (error) {
+                console.error("Hata:", error);
+                sonuclarDiv.innerHTML = "<p>Hata oluştu. Lütfen tekrar deneyin.</p>";
+            }
+        }
+
+        document.getElementById("hesapla-butonu").addEventListener("click", hesapla);
+        sayiAdedi.addEventListener("input", olusturSayiInputleri); // Sayı adedi değiştiğinde sayı inputlarını oluştur
+    </script>
+</body>
+</html>

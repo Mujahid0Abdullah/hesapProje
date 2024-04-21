@@ -57,7 +57,7 @@
                 sayilarDiv.appendChild(document.createElement("br"));
             }
         }*/
-
+/*
         async function hesapla() {
             const hedef = parseInt(hedefSayisi.value);
             const sayiAdediValue = 6;
@@ -105,10 +105,57 @@
                 console.error("Hata:", error);
                 sonuclarDiv.innerHTML = "<p>Hata oluştu. Lütfen tekrar deneyin.</p>";
             }
+        }*/
+        async function hesapla() {
+    const hedef = parseInt(hedefSayisi.value);
+    const sayiAdediValue = 6;
+
+    if (isNaN(hedef) || isNaN(sayiAdediValue)) {
+        alert("Lütfen geçerli değerler girin.");
+        return;
+    }
+
+    const sayilar = [];
+    for (let i = 1; i <= 6; i++) {
+        const sayi = parseInt(document.getElementById(`sayi${i}`).value);
+        if (isNaN(sayi)) {
+            alert(`Lütfen ${i}. sayı için geçerli bir değer girin.`);
+            return;
         }
+        sayilar.push(sayi);
+    }
+
+    console.log(sayilar + "\n" + hedef);
+
+    const veri = {
+        hedef,
+        sayilar,
+    };
+    console.log(veri);
+
+    const url = "/hesapla";
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(veri),
+    };
+
+    try {
+        const response = await fetch(url, options);
+        const data = await response.json();
+
+        const sonuclarHtml = data.denklemler.map(denklem => `<p>${denklem}</p>`).join("");
+        sonuclarDiv.innerHTML = sonuclarHtml;
+    } catch (error) {
+        console.error("Hata:", error);
+        sonuclarDiv.innerHTML = "<p>Hata oluştu. Lütfen tekrar deneyin.</p>";
+    }
+}
 
         document.getElementById("hesapla-butonu").addEventListener("click", hesapla);
-        sayiAdedi.addEventListener("input", olusturSayiInputleri); // Sayı adedi değiştiğinde sayı inputlarını oluştur
+      
     </script>
 </body>
 </html>

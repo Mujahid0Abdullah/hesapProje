@@ -36,6 +36,22 @@ def denklemleri_uret(sayilar, hedef):
     return cozumler if cozumler else ["Çözüm bulunamadı."]
 
 
+#
+# def denklemleri_uret(sayilar, hedef):
+#    islemler = ['+', '-', '*', '/']
+#    cozumler = []
+#
+#    for permutasyon in itertools.permutations(sayilar):
+#        for ops in itertools.product(islemler, repeat=len(sayilar) - 1):
+#            denklem = ''.join(str(sayi) + islem for sayi, islem in zip(permutasyon, ops)) + str(permutasyon[-1])
+#            sonuc = hesapla_denklem(denklem)
+ #           if sonuc is not None and abs(sonuc - hedef) < 1e-6:
+#                cozumler.append(denklem)
+#                if len(cozumler) >= 50:  # 50 sonuç bulunca döngüden çık
+#                    return cozumler
+#
+#    return cozumler if cozumler else ["Çözüm bulunamadı."]
+
 
 app = Flask(__name__)
 CORS(app)

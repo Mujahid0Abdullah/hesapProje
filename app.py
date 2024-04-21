@@ -36,41 +36,6 @@ def denklemleri_uret(sayilar, hedef):
     return cozumler if cozumler else ["Çözüm bulunamadı."]
 
 
-def input_al(mesaj, tip=None, min_=None, max_=None):
-    while True:
-        try:
-            kullanici_girdisi = input(mesaj)
-            if tip is not None:
-                kullanici_girdisi = tip(kullanici_girdisi)
-            if min_ is not None and kullanici_girdisi < min_:
-                print(f"Lütfen {min_} veya daha büyük bir sayı girin.")
-                continue
-            if max_ is not None and kullanici_girdisi > max_:
-                print(f"Lütfen {max_} veya daha küçük bir sayı girin.")
-                continue
-            return kullanici_girdisi
-        except ValueError:
-            print("Lütfen geçerli bir sayı girin.")
-
-
-def ana_program():
-    while True:
-        hedef = input_al("Hedef sayıyı girin: ", int)
-        sayi_adedi = input_al("Kaç sayı kullanmak istiyorsunuz? ", int, 1)
-
-        # Kullanıcıdan sayıları manuel olarak girmesini isteyin
-        sayilar = [input_al(f"{i + 1}. sayıyı girin: ", int) for i in range(sayi_adedi)]
-
-        print(f"Kullanılacak sayılar: {sayilar}")
-        denklemler = denklemleri_uret(sayilar, hedef)
-
-        print("Hesaplama tamamlandı. İşte sonuçlar:")
-        for denklem in denklemler:
-            print(f"{denklem} = {hedef}")
-
-        tekrar_dene = input_al("Tekrar denemek ister misiniz? (Evet için 'e' veya 'E' girin): ", str)
-        if tekrar_dene.lower() != 'e':
-            break
 
 app = Flask(__name__)
 CORS(app)

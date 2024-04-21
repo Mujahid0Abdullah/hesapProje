@@ -7,9 +7,18 @@
 </head>
 <body>
     <h1>Hedef Sayıyı Girin</h1>
-    <input type="number" id="hedef-sayisi" placeholder="Hedef Sayı">
-    <h1>Kaç Sayı Kullanmak İstiyorsunuz?</h1>
-    <input type="number" id="sayi-adedi" placeholder="Sayı Adedi">
+    <input type="number" id="hedef-sayisi" placeholder="Hedef Sayı" readonly>
+    <button onclick="hedefsayiuret()" style="border: 2px solid #0d0165; ">Sayı Üret</button>
+    <h1>Kullanılacak Sayılar</h1>
+    <button onclick="sayilerUret()" style="border: 2px solid #0d0165; ">Sayılar Üret</button>
+    <input type="number" id="sayi1"  readonly >
+    <input type="number" id="sayi2"  readonly >
+    <input type="number" id="sayi3"  readonly >
+    <input type="number" id="sayi4"  readonly >
+    <input type="number" id="sayi5"  readonly >
+    <input type="number" id="sayi6"  readonly >
+    
+    
     <br>
     <br>
     <div id="sayilar"></div>
@@ -24,6 +33,17 @@
         const sayilarDiv = document.getElementById("sayilar");
         const sonuclarDiv = document.getElementById("sonuclar");
 
+        function hedefsayiuret(){
+            hedefSayisi.value = Math.floor(Math.random() * 701);
+        }
+
+        function sayilerUret(){
+            for(let i=1;i<7;i++ ){
+            const sayiler = document.getElementById(`sayi${i}`);
+            sayiler.value = Math.floor(Math.random() * 20);}
+        }
+      
+/*
         function olusturSayiInputleri() {
             const sayiAdediValue = parseInt(sayiAdedi.value);
             sayilarDiv.innerHTML = ""; // Önceki sayı inputlarını temizle
@@ -36,11 +56,11 @@
                 sayilarDiv.appendChild(input);
                 sayilarDiv.appendChild(document.createElement("br"));
             }
-        }
+        }*/
 
         async function hesapla() {
             const hedef = parseInt(hedefSayisi.value);
-            const sayiAdediValue = parseInt(sayiAdedi.value);
+            const sayiAdediValue = 6;
 
             if (isNaN(hedef) || isNaN(sayiAdediValue)) {
                 alert("Lütfen geçerli değerler girin.");
@@ -48,7 +68,7 @@
             }
 
             const sayilar = [];
-            for (let i = 1; i <= sayiAdediValue; i++) {
+            for (let i = 1; i <= 6; i++) {
                 const sayi = parseInt(document.getElementById(`sayi${i}`).value);
                 if (isNaN(sayi)) {
                     alert(`Lütfen ${i}. sayı için geçerli bir değer girin.`);
@@ -57,14 +77,17 @@
                 sayilar.push(sayi);
             }
 
+            console.log(sayilar+"\n"+hedef)
+
             const veri = {
                 hedef,
                 sayilar,
             };
+            console.log(veri)
 
             const url = "/hesapla";
             const options = {
-                
+
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -73,7 +96,7 @@
             };
 
             try {
-                const response = await fetch(url, options);
+                const response =  fetch(url, options);
                 const data = await response.json();
 
                 const sonuclarHtml = data.denklemler.map(denklem => `<p>${denklem}</p>`).join("");

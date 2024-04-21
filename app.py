@@ -32,6 +32,8 @@ def denklemleri_uret(sayilar, hedef):
             sonuc = hesapla_denklem(denklem)
             if sonuc is not None and abs(sonuc - hedef) < 1e-6:
                 cozumler.append(denklem)
+                if len(cozumler) >= 50:  # 50 sonuç bulunca döngüden çık
+                    return cozumler
 
     return cozumler if cozumler else ["Çözüm bulunamadı."]
 
